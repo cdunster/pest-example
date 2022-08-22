@@ -212,4 +212,83 @@ mod tests {
             ]
         };
     }
+
+    #[test]
+    fn can_parse_empty_file() {
+        parses_to! {
+            parser: CSVParser,
+            input: "",
+            rule: Rule::file,
+            tokens: [
+                file(0, 0, [
+                    EOI(0, 0),
+                ])
+            ]
+        };
+    }
+
+    #[test]
+    fn can_parse_file_with_single_field() {
+        parses_to! {
+            parser: CSVParser,
+            input: "1.42",
+            rule: Rule::file,
+            tokens: [
+                file(0, 4, [
+                    record_list(0, 4, [
+                        record(0, 4, [
+                            field(0, 4)
+                        ])
+                    ]),
+                    EOI(4, 4),
+                ])
+            ]
+        };
+    }
+
+    #[test]
+    fn can_parse_file_with_single_record() {
+        parses_to! {
+            parser: CSVParser,
+            input: "1, 42, 346.1",
+            rule: Rule::file,
+            tokens: [
+                file(0, 12, [
+                    record_list(0, 12, [
+                        record(0, 12, [
+                            field(0, 1),
+                            field(3, 5),
+                            field(7, 12)
+                        ])
+                    ]),
+                    EOI(12, 12),
+                ])
+            ]
+        };
+    }
+
+    #[test]
+    fn can_parse_file_with_multiple_records() {
+        parses_to! {
+            parser: CSVParser,
+            input: "1, 42, 346.1\n78, 09",
+            rule: Rule::file,
+            tokens: [
+                file(0, 19, [
+                    record_list(0, 19, [
+                        record(0, 12, [
+                            field(0, 1),
+                            field(3, 5),
+                            field(7, 12)
+                        ]),
+                        record(13, 19, [
+                            field(13, 15),
+                            field(17, 19),
+                        ])
+                    ]),
+                    EOI(19, 19),
+                ])
+            ]
+        };
+    }
 }
