@@ -1,4 +1,9 @@
+use pest::{error::Error as PestError, iterators::Pairs, Parser};
 use pest_derive::Parser;
+
+pub fn parse_as_csv_file(input: &str) -> Result<Pairs<Rule>, PestError<Rule>> {
+    CSVParser::parse(Rule::file, input)
+}
 
 #[derive(Parser)]
 #[grammar = "../grammars/csv.pest"]
@@ -6,8 +11,8 @@ struct CSVParser;
 
 #[cfg(test)]
 mod tests {
-    use super::{CSVParser, Rule};
-    use pest::{consumes_to, fails_with, parses_to};
+    use super::{parse_as_csv_file, CSVParser, Rule};
+    use pest::{consumes_to, fails_with, parses_to, Position, Token};
 
     #[test]
     fn can_parse_int_as_field() {
@@ -288,5 +293,82 @@ mod tests {
                 ])
             ]
         };
+    }
+
+    #[test]
+    fn parse_csv_file_parses_input_as_file() {
+        let input = "1, 2\n3";
+        let parsed = parse_as_csv_file(input);
+
+        let tokens: Vec<_> = parsed.unwrap().tokens().collect();
+
+        let expected_tokens = vec![
+            Token::Start {
+                rule: Rule::file,
+                pos: Position::new(input, 0).unwrap(),
+            },
+            Token::Start {
+                rule: Rule::record_list,
+                pos: Position::new(input, 0).unwrap(),
+            },
+            Token::Start {
+                rule: Rule::record,
+                pos: Position::new(input, 0).unwrap(),
+            },
+            Token::Start {
+                rule: Rule::field,
+                pos: Position::new(input, 0).unwrap(),
+            },
+            Token::End {
+                rule: Rule::field,
+                pos: Position::new(input, 1).unwrap(),
+            },
+            Token::Start {
+                rule: Rule::field,
+                pos: Position::new(input, 3).unwrap(),
+            },
+            Token::End {
+                rule: Rule::field,
+                pos: Position::new(input, 4).unwrap(),
+            },
+            Token::End {
+                rule: Rule::record,
+                pos: Position::new(input, 4).unwrap(),
+            },
+            Token::Start {
+                rule: Rule::record,
+                pos: Position::new(input, 5).unwrap(),
+            },
+            Token::Start {
+                rule: Rule::field,
+                pos: Position::new(input, 5).unwrap(),
+            },
+            Token::End {
+                rule: Rule::field,
+                pos: Position::new(input, 6).unwrap(),
+            },
+            Token::End {
+                rule: Rule::record,
+                pos: Position::new(input, 6).unwrap(),
+            },
+            Token::End {
+                rule: Rule::record_list,
+                pos: Position::new(input, 6).unwrap(),
+            },
+            Token::Start {
+                rule: Rule::EOI,
+                pos: Position::new(input, 6).unwrap(),
+            },
+            Token::End {
+                rule: Rule::EOI,
+                pos: Position::new(input, 6).unwrap(),
+            },
+            Token::End {
+                rule: Rule::file,
+                pos: Position::new(input, 6).unwrap(),
+            },
+        ];
+
+        assert_eq!(expected_tokens, tokens);
     }
 }
