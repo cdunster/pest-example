@@ -1,3 +1,2 @@
-mod parser;
 
 fn main() {}

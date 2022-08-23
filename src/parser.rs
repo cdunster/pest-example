@@ -1,7 +1,9 @@
-use pest::{error::Error as PestError, iterators::Pairs, Parser};
+use pest::{iterators::Pairs, Parser};
 use pest_derive::Parser;
 
-pub fn parse_as_csv_file(input: &str) -> Result<Pairs<Rule>, PestError<Rule>> {
+pub type CSVParseError = pest::error::Error<Rule>;
+
+pub fn parse_as_csv_file(input: &str) -> Result<Pairs<Rule>, CSVParseError> {
     CSVParser::parse(Rule::file, input)
 }
 
