@@ -6,4 +6,10 @@ edition = "2021"
 [dependencies]
 pest = "2.3.0"
 pest_derive = "2.3.0"
+structopt = "0.3.26"
+
+[dev-dependencies]
+assert_cmd = "2.0.4"
+predicates = "2.1.1"
+tempfile = "3.3.0"
 
