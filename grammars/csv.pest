@@ -1,5 +1,5 @@
 WHITESPACE = _{ " " | "\t" }
 field = { (ASCII_DIGIT | "." | "-")+ }
 record = { field ~ ("," ~ field)* ~ ","? }
-record_list = _{ ((record ~ NEWLINE) | record | NEWLINE)* }
+record_list = _{ record? ~ (NEWLINE+ ~ record?)* }
 file = { SOI ~ record_list ~ EOI }
