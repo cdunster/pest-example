@@ -114,18 +114,6 @@ mod tests {
     }
 
     #[test]
-    fn cant_parse_empty_record_list() {
-        fails_with! {
-            parser: CSVParser,
-            input: "",
-            rule: Rule::record_list,
-            positives: [Rule::field],
-            negatives: [],
-            pos: 0
-        };
-    }
-
-    #[test]
     fn can_parse_single_record_as_record_list() {
         parses_to! {
             parser: CSVParser,
@@ -217,6 +205,40 @@ mod tests {
             tokens: [
                 file(0, 0, [
                     EOI(0, 0),
+                ])
+            ]
+        };
+    }
+
+    #[test]
+    fn can_parse_file_with_only_newline() {
+        parses_to! {
+            parser: CSVParser,
+            input: "\n",
+            rule: Rule::file,
+            tokens: [
+                file(0, 1, [
+                    EOI(1, 1)
+                ])
+            ]
+        };
+    }
+
+    #[test]
+    fn can_parse_file_with_newline_separated_fields() {
+        parses_to! {
+            parser: CSVParser,
+            input: "1\n2\n",
+            rule: Rule::file,
+            tokens: [
+                file(0, 4, [
+                    record(0, 1, [
+                        field(0, 1)
+                    ]),
+                    record(2, 3, [
+                        field(2, 3)
+                    ]),
+                    EOI(4, 4)
                 ])
             ]
         };
