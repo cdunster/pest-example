@@ -11,18 +11,11 @@ pub fn sum_csv_values<T: Read>(input: &mut T) -> Result<f64, CSVParseError> {
 
     let mut sum = 0.0;
     let file = parse_as_csv_file(&input_string)?.next().unwrap();
-    for record_list in file.into_inner() {
-        match record_list.as_rule() {
-            parser::Rule::record_list => {
-                for record in record_list.into_inner() {
-                    match record.as_rule() {
-                        parser::Rule::record => {
-                            for field in record.into_inner() {
-                                sum += field.as_str().parse::<f64>().unwrap();
-                            }
-                        }
-                        _ => unreachable!(),
-                    }
+    for record in file.into_inner() {
+        match record.as_rule() {
+            parser::Rule::record => {
+                for field in record.into_inner() {
+                    sum += field.as_str().parse::<f64>().unwrap();
                 }
             }
             parser::Rule::EOI => (),

@@ -132,11 +132,9 @@ mod tests {
             input: "42, 55",
             rule: Rule::record_list,
             tokens: [
-                record_list(0, 6, [
-                    record(0, 6, [
-                        field(0, 2),
-                        field(4, 6)
-                    ])
+                record(0, 6, [
+                    field(0, 2),
+                    field(4, 6)
                 ])
             ]
         };
@@ -149,11 +147,9 @@ mod tests {
             input: "98, 12.123\n",
             rule: Rule::record_list,
             tokens: [
-                record_list(0, 11, [
-                    record(0, 10, [
-                        field(0, 2),
-                        field(4, 10)
-                    ])
+                record(0, 10, [
+                    field(0, 2),
+                    field(4, 10)
                 ])
             ]
         };
@@ -166,15 +162,13 @@ mod tests {
             input: "1, 2,3\n52",
             rule: Rule::record_list,
             tokens: [
-                record_list(0, 9, [
-                    record(0, 6, [
-                        field(0, 1),
-                        field(3, 4),
-                        field(5, 6),
-                    ]),
-                    record(7, 9, [
-                        field(7, 9),
-                    ]),
+                record(0, 6, [
+                    field(0, 1),
+                    field(3, 4),
+                    field(5, 6),
+                ]),
+                record(7, 9, [
+                    field(7, 9),
                 ])
             ]
         };
@@ -187,13 +181,11 @@ mod tests {
             input: "1,\n2,",
             rule: Rule::record_list,
             tokens: [
-                record_list(0, 5, [
-                    record(0, 2, [
-                        field(0, 1)
-                    ]),
-                    record(3, 5, [
-                        field(3, 4)
-                    ])
+                record(0, 2, [
+                    field(0, 1)
+                ]),
+                record(3, 5, [
+                    field(3, 4)
                 ])
             ]
         };
@@ -206,13 +198,11 @@ mod tests {
             input: "1,\n2\n",
             rule: Rule::record_list,
             tokens: [
-                record_list(0, 4, [
-                    record(0, 2, [
-                        field(0, 1)
-                    ]),
-                    record(3, 4, [
-                        field(3, 4)
-                    ])
+                record(0, 2, [
+                    field(0, 1)
+                ]),
+                record(3, 4, [
+                    field(3, 4)
                 ])
             ]
         };
@@ -240,10 +230,8 @@ mod tests {
             rule: Rule::file,
             tokens: [
                 file(0, 4, [
-                    record_list(0, 4, [
-                        record(0, 4, [
-                            field(0, 4)
-                        ])
+                    record(0, 4, [
+                        field(0, 4)
                     ]),
                     EOI(4, 4),
                 ])
@@ -259,12 +247,10 @@ mod tests {
             rule: Rule::file,
             tokens: [
                 file(0, 12, [
-                    record_list(0, 12, [
-                        record(0, 12, [
-                            field(0, 1),
-                            field(3, 5),
-                            field(7, 12)
-                        ])
+                    record(0, 12, [
+                        field(0, 1),
+                        field(3, 5),
+                        field(7, 12)
                     ]),
                     EOI(12, 12),
                 ])
@@ -280,16 +266,14 @@ mod tests {
             rule: Rule::file,
             tokens: [
                 file(0, 19, [
-                    record_list(0, 19, [
-                        record(0, 12, [
-                            field(0, 1),
-                            field(3, 5),
-                            field(7, 12)
-                        ]),
-                        record(13, 19, [
-                            field(13, 15),
-                            field(17, 19),
-                        ])
+                    record(0, 12, [
+                        field(0, 1),
+                        field(3, 5),
+                        field(7, 12)
+                    ]),
+                    record(13, 19, [
+                        field(13, 15),
+                        field(17, 19),
                     ]),
                     EOI(19, 19),
                 ])
@@ -307,10 +291,6 @@ mod tests {
         let expected_tokens = vec![
             Token::Start {
                 rule: Rule::file,
-                pos: Position::new(input, 0).unwrap(),
-            },
-            Token::Start {
-                rule: Rule::record_list,
                 pos: Position::new(input, 0).unwrap(),
             },
             Token::Start {
@@ -351,10 +331,6 @@ mod tests {
             },
             Token::End {
                 rule: Rule::record,
-                pos: Position::new(input, 6).unwrap(),
-            },
-            Token::End {
-                rule: Rule::record_list,
                 pos: Position::new(input, 6).unwrap(),
             },
             Token::Start {
