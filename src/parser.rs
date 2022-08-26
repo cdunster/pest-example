@@ -338,6 +338,18 @@ mod tests {
     }
 
     #[test]
+    fn cant_parse_file_with_field_with_multiple_decimal_points() {
+        fails_with! {
+            parser: CSVParser,
+            input: "1.2.3",
+            rule: Rule::file,
+            positives: [Rule::EOI],
+            negatives: [],
+            pos: 3
+        };
+    }
+
+    #[test]
     fn parse_csv_file_parses_input_as_file() {
         let input = "1, 2\n3";
         let parsed = parse_as_csv_file(input);
