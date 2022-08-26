@@ -37,6 +37,16 @@ mod tests {
     }
 
     #[test]
+    fn can_parse_float_without_leading_zero_as_field() {
+        parses_to! {
+            parser: CSVParser,
+            input: ".250",
+            rule: Rule::field,
+            tokens: [field(0, 4)]
+        };
+    }
+
+    #[test]
     fn can_parse_negative_int_as_field() {
         parses_to! {
             parser: CSVParser,
@@ -300,6 +310,18 @@ mod tests {
                     EOI(19, 19),
                 ])
             ]
+        };
+    }
+
+    #[test]
+    fn cant_parse_file_with_fields_with_spaces() {
+        fails_with! {
+            parser: CSVParser,
+            input: "1 1",
+            rule: Rule::file,
+            positives: [Rule::EOI],
+            negatives: [],
+            pos: 2
         };
     }
 
