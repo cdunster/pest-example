@@ -67,6 +67,16 @@ mod tests {
     }
 
     #[test]
+    fn can_parse_negative_float_without_leading_zero_as_field() {
+        parses_to! {
+            parser: CSVParser,
+            input: "-.250",
+            rule: Rule::field,
+            tokens: [field(0, 5)]
+        };
+    }
+
+    #[test]
     fn cant_parse_string_as_field() {
         fails_with! {
             parser: CSVParser,
